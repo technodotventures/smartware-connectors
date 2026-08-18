@@ -1,5 +1,5 @@
 {
-  "name": "@smartware/connectors",
+  "name": "@technodotventures/smartware-connectors",
   "version": "0.1.0",
   "description": "Connector infrastructure for Smartware-powered apps: MCP client pool, Docker runtime, OAuth token management, connection grants, and audit logging.",
   "type": "module",
