@@ -1,0 +1,56 @@
+name: Connectors gate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: connectors-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [22, 24]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          package-manager-cache: false
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Verify native SQLite runtime
+        run: |
+          node --input-type=module -e "const { default: Database } = await import('better-sqlite3'); const db = new Database(':memory:'); db.close()"
+
+      - name: Reject production vulnerabilities
+        run: npm audit --omit=dev --audit-level=low
+
+      - name: Type-check connectors
+        run: npm run typecheck
+
+      - name: Build connectors
+        run: npm run build
+
+      - name: Verify published package surface
+        if: matrix.node-version == 24
+        run: |
+          package_tarball="$(npm pack --silent)"
+          tar -tf "$package_tarball" | grep -Fx 'package/dist/index.js'
+          tar -tf "$package_tarball" | grep -Fx 'package/dist/index.d.ts'
