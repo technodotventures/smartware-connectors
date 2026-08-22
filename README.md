@@ -1,4 +1,4 @@
-# @smartware/connectors
+# @technodotventures/smartware-connectors
 
 Connector infrastructure for
 [Smartware](https://github.com/technodotventures/Smartware)-powered apps.
@@ -8,12 +8,12 @@ Provides everything an app needs to connect to external services: OAuth token ma
 ## Install
 
 ```bash
-npm install @smartware/connectors
+npm install @technodotventures/smartware-connectors
 ```
 
 Peer dependencies (your app must provide):
 - `@modelcontextprotocol/sdk` ^1.29.0
-- `better-sqlite3` ^12.0.0
+- `better-sqlite3` ^12.0.0 or ^13.0.0
 
 ## Quick start
 
@@ -27,7 +27,7 @@ import {
   callMcpTool,
   getFreshAccessToken,
   shutdownMcpClients,
-} from '@smartware/connectors';
+} from '@technodotventures/smartware-connectors';
 
 // 1. Define your env (your app's config layer provides these values)
 const env: ConnectorEnv = {
@@ -57,7 +57,7 @@ await shutdownMcpClients(env);
 ## Architecture
 
 ```
-@smartware/connectors
+@technodotventures/smartware-connectors
 ├── ConnectorEnv              Config interface (dataDir, mcpClientEnabled, etc.)
 ├── Integration Registry      Service definitions (OAuth endpoints, fields, scopes)
 ├── Integration Config        File-based credential storage (JSON, 0o600)
@@ -80,7 +80,7 @@ await shutdownMcpClients(env);
 Apps can register their own integrations at runtime:
 
 ```typescript
-import { registerIntegration, registerMcpProvider, registerTokenEndpoint } from '@smartware/connectors';
+import { registerIntegration, registerMcpProvider, registerTokenEndpoint } from '@technodotventures/smartware-connectors';
 
 // Add a custom OAuth provider
 registerIntegration({
@@ -116,16 +116,16 @@ registerMcpProvider({
 
 ```typescript
 // Everything
-import { ... } from '@smartware/connectors';
+import { ... } from '@technodotventures/smartware-connectors';
 
 // Just MCP client pool + Docker + registry
-import { ... } from '@smartware/connectors/mcp-clients';
+import { ... } from '@technodotventures/smartware-connectors/mcp-clients';
 
 // Just grants, audit, OAuth
-import { ... } from '@smartware/connectors/connections';
+import { ... } from '@technodotventures/smartware-connectors/connections';
 
 // Just external MCP server management
-import { ... } from '@smartware/connectors/mcp';
+import { ... } from '@technodotventures/smartware-connectors/mcp';
 ```
 
 ## Design principles
@@ -134,6 +134,16 @@ import { ... } from '@smartware/connectors/mcp';
 - **No framework dependency** — pure TypeScript, works with Fastify, Express, Hono, or bare Node
 - **Peer dependencies** — apps bring their own `@modelcontextprotocol/sdk` and `better-sqlite3` versions
 - **Runtime-extensible** — `registerIntegration()`, `registerMcpProvider()`, `registerTokenEndpoint()` let apps add providers without forking
+
+## Development
+
+Requirements: Node.js 22 or newer.
+
+```bash
+npm ci
+npm run typecheck
+npm run build
+```
 
 ## Smartware ecosystem
 
