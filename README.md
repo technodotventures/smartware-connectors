@@ -145,6 +145,9 @@ npm run typecheck
 npm run build
 ```
 
+CI also validates the native SQLite runtime, production dependency audit, and
+packed package surface on Node.js 22 and 24.
+
 ## Smartware ecosystem
 
 - [Smartware](https://github.com/technodotventures/Smartware) — the memory
