@@ -152,8 +152,6 @@ packed package surface on Node.js 22 and 24.
 
 - [Smartware](https://github.com/technodotventures/Smartware) — the memory
   protocol and reference implementation.
-- [Smartware MCP Servers](https://github.com/technodotventures/smartware-mcp-servers) —
-  Docker-packaged MCP service adapters managed by this runtime.
 
 ## License
 
